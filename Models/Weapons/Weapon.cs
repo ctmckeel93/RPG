@@ -1,3 +1,4 @@
+using System;
 using RPG.Interfaces;
 
 namespace RPG.Models
@@ -11,6 +12,8 @@ namespace RPG.Models
 
         public string AttackStat {get; set;}
 
+        public bool IsHeavy {get;set;}
+
         public int? SellingPrice {get; set;}
         public double? Range { get; set;}
 
@@ -21,7 +24,8 @@ namespace RPG.Models
             Rarity = rarity;
             AttackStat = null;
             SellingPrice = null;  
-            Range = null;  
+            Range = null;
+            IsHeavy = false;
 
         }
 
@@ -59,7 +63,17 @@ namespace RPG.Models
             }
             if (hand == "Offhand")
             {
-                target.Offhand = this;
+                if (IsHeavy == false)
+                {
+                    if (target.Main.IsHeavy == false)
+                    {
+                        target.Offhand = this;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("This weapon cannot be equipped in this slot");
+                }
             }
         }
     }

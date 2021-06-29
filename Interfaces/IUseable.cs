@@ -1,6 +1,6 @@
 namespace RPG.Interfaces
 {
-    public interface ICarriable
+    public interface IUseable
     {
         
     }

@@ -1,11 +1,15 @@
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 using RPG.Interfaces;
 
 namespace RPG.Models
 {
     public abstract class Character
     {
-        private int Health;
+        protected int Health;
+
+        public int HealthProp { get{return this.Health;}}
 
 
         public string Name {get;set;}
@@ -17,9 +21,10 @@ namespace RPG.Models
         public int Wisdom {get;set;}
         public int Intelligence {get;set;}
         public int Charisma {get;set;}
+        public int AC {get;set;}
         public Weapon Main {get;set;}
-        IEquippable Offhand {get;set;}
-        IEquippable Armor {get;set;}  
+        public IEquippable Offhand {get;set;}
+        public IEquippable Armor {get;set;}  
         
         public int Proficiency {get;set;}
         public int Level {get;set;}
@@ -34,6 +39,8 @@ namespace RPG.Models
 
         public double DefenseMultiplier {get;set;}
         public double AttackMultiplier {get;set;}
+
+        private List<ICarriable> Inventory {get;set;}
 
         Random roll = new Random();
 
@@ -51,6 +58,7 @@ namespace RPG.Models
             Wisdom = wis;
             Intelligence = intel;
             Charisma = cha;
+            AC = 10+Dexterity;
 
             Main = null;
             Offhand = null;
@@ -66,6 +74,22 @@ namespace RPG.Models
 
             DefenseMultiplier = 1;
             AttackMultiplier = 1;
+        }
+
+        public int RollD20(string stat)
+        {
+            Random rng = new Random();
+            PropertyInfo statProp = typeof(Character).GetProperty(stat);
+            
+            int mod = (int)statProp.GetValue(statProp)/2 - 5;
+            int result = rng.Next(1,21) + mod;
+
+            return result;
+        }
+
+        public void takeDamage(int dmg)
+        {
+            Health -= dmg;
         }
     }
 }
